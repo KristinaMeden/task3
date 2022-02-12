@@ -1,18 +1,36 @@
 import React, { useState } from 'react'
-import Head from './head'
-// import wave from '../assets/images/wave.jpg'
+import { Route, Switch, useLocation } from 'react-router-dom'
+import Header from './header';
+import Repository from './repository';
+import Search from './search';
+import User from './user';
 
 const Home = () => {
-  const [counter, setCounterNew] = useState(0)
+
+  const [userName, setUserName] = useState('')
+  const [repoName, setRepoName] = useState('')
+
+  const userNameChange = (value) => {
+    setUserName(value)
+    setRepoName('')
+  }
+
+  const repoNameChange = (value) => {
+    setRepoName(value)
+  }
+
+  const location = useLocation();
 
   return (
     <div>
-      <Head title="Dashboard" />
-      <img alt="wave" src="images/wave.jpg" />
-      <button type="button" onClick={() => setCounterNew(counter + 1)}>
-        updateCounter
-      </button>
-      <div> Hello World Dashboard {counter} </div>
+      {location.pathname !== "/" && <Header repo={repoName} username={userName} />}
+      <div className='flex justify-center items-center h-screen'>
+        <Switch>
+          <Route path="/" exact component={() => <Search />} />
+          <Route path="/:userName" exact component={()=> <User onChange={userNameChange} />} />
+          <Route path="/:userName/:repositoryName" exact component={()=> <Repository onChange={repoNameChange} />} />
+        </Switch>
+      </div>
     </div>
   )
 }

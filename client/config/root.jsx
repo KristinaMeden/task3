@@ -10,6 +10,7 @@ import DummyView from '../components/dummy-view'
 import NotFound from '../components/404'
 
 import Startup from './startup'
+import Head from '../components/head'
 
 const OnlyAnonymousRoute = ({ component: Component, ...rest }) => {
   const user = useSelector((state) => state.auth.user)
@@ -44,15 +45,14 @@ const RouterSelector = (props) =>
 
 const RootComponent = (props) => {
   return (
-    <Provider store={store}>
+    <Provider store={store}>  
+    <Head />
       <RouterSelector history={history} location={props.location} context={props.context}>
         <Startup>
           <Switch>
-            <Route exact path="/" component={DummyView} />
-            <Route exact path="/dashboard" component={Home} />
+            <Route exact path="/*" component={Home} />
             <PrivateRoute exact path="/hidden-route" component={DummyView} />
             <OnlyAnonymousRoute exact path="/anonymous-route" component={DummyView} />
-
             <Route component={NotFound} />
           </Switch>
         </Startup>
